@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kingdoms Through Time</title>
+    <script type="module" crossorigin src="./assets/main-Dr3IRBLX.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/src-BJv8vUZZ.js">
+    <link rel="stylesheet" crossorigin href="./assets/main-BVP3_Sjs.css">
+  </head>
+  <body>
+    <div id="menu" hidden></div>
+
+    <div id="game" hidden>
+      <header id="topbar">
+        <button data-action="menu" class="menu-btn" title="Pause and menu (Esc)">☰ Menu</button>
+        <div id="resources"></div>
+        <div id="clock" title="Game time">0:00</div>
+        <button id="idle-btn" data-action="idle" title="Select the next idle villager (.)">Idle villagers: 0</button>
+      </header>
+      <p id="hud-info">Loading…</p>
+      <div id="alerts"></div>
+      <div id="objectives" hidden></div>
+      <footer id="bottombar">
+        <canvas id="minimap" width="180" height="180" title="Minimap: click to move the view"></canvas>
+        <section id="info"></section>
+        <section id="grid"></section>
+      </footer>
+      <div id="select-box"></div>
+      <div id="tooltip"></div>
+      <div id="banner" hidden></div>
+      <div id="lag" hidden>Waiting for other players…</div>
+      <input id="chat-input" hidden maxlength="200" placeholder="Chat to everyone (Enter sends, Esc cancels)" />
+      <div id="waiting" class="overlay" hidden></div>
+      <div id="paused-all" class="overlay" hidden></div>
+      <div id="overlay" hidden></div>
+    </div>
+
+  </body>
+</html>
