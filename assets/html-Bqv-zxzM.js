@@ -1,0 +1,1 @@
+var e=e=>e.replace(/&/g,`&amp;`).replace(/"/g,`&quot;`).replace(/</g,`&lt;`),t=e=>`#${e.toString(16).padStart(6,`0`)}`;export{e as n,t};

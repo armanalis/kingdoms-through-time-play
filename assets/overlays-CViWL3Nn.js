@@ -1,0 +1,31 @@
+import{a as e,f as t,t as n,u as r}from"./src-HEAU8biX.js";import{o as i,y as a}from"./main-B4FrYiZA.js";import{n as o}from"./html-Bqv-zxzM.js";var s=new Map([...r,...n,...e].map(e=>[e.id,e.name])),c=(e,t)=>e===1?t:`${t}s`;function l(e,t,n){let r=(e,t)=>n?` (${Math.min(t,e)}/${t})`:``;switch(e.kind){case`gather`:return`Gather ${e.amount} ${e.resource}${r(n?.gathered[e.resource]??0,e.amount)}`;case`build`:return`Build ${e.count} ${c(e.count,s.get(e.building)??e.building)}${r(n?.have[e.building]??0,e.count)}`;case`units`:return`Have ${e.count} ${c(e.count,s.get(e.unit)??e.unit)}${r(n?.have[e.unit]??0,e.count)}`;case`epoch`:return`Reach the ${s.get(e.epoch)??e.epoch}`;case`defeat`:return`Defeat ${t[e.player-1]??`player ${e.player+1}`}`;case`survive`:{let t=Math.max(0,e.seconds-(n?.seconds??0));return`Survive ${Math.round(e.seconds/60)} minutes${n?` (${Math.floor(t/60)}:${String(t%60).padStart(2,`0`)} left)`:``}`}}}function u(e,t=`You`){let n=i();return{...n,seed:e.seed,mapType:e.mapType,mapSize:e.mapSize,startEpoch:e.startEpoch,endEpoch:e.endEpoch,startResources:e.startResources??null,players:[{...n.players[0],name:t},...e.enemies.map((e,t)=>({name:e.name,color:t+1,team:t+1,civ:[],ai:e.ai}))],mission:e.id,objectives:e.objectives}}var d=`oe-campaign`;function f(){try{return JSON.parse(localStorage.getItem(d)??`[]`)}catch{return[]}}function p(e){f().includes(e)||localStorage.setItem(d,JSON.stringify([...f(),e]))}function m(e,t,n){e.innerHTML=`
+    <label><input type="checkbox" name="edgeScroll"> Scroll when the mouse touches the screen edge</label>
+    <label><input type="checkbox" name="wasdCamera"> Move the camera with W A S D (those keys then don't press buttons)</label>
+    <label>Scroll speed <input type="range" name="scrollSpeed" min="0.5" max="2.5" step="0.25"> <output></output></label>
+    <label><input type="checkbox" name="showDebug"> Show tick / state hash line</label>
+    <label>Sound effects <input type="range" name="sfxVolume" min="0" max="100" step="5"> <output data-for="sfxVolume"></output></label>
+    <label>Music <input type="range" name="musicVolume" min="0" max="100" step="5"> <output data-for="musicVolume"></output></label>`;let r=e.querySelector(`[name=edgeScroll]`),i=e.querySelector(`[name=scrollSpeed]`),o=e.querySelector(`[name=showDebug]`),s=e.querySelector(`[name=wasdCamera]`),c=e.querySelector(`[name=sfxVolume]`),l=e.querySelector(`[name=musicVolume]`),u=e.querySelector(`output`),d=()=>{u.textContent=`×${t.scrollSpeed}`,e.querySelector(`[data-for=sfxVolume]`).textContent=`${t.sfxVolume}%`,e.querySelector(`[data-for=musicVolume]`).textContent=`${t.musicVolume}%`};r.checked=t.edgeScroll,i.value=String(t.scrollSpeed),o.checked=t.showDebug,s.checked=t.wasdCamera,c.value=String(t.sfxVolume),l.value=String(t.musicVolume),d(),e.addEventListener(`input`,()=>{t.edgeScroll=r.checked,t.scrollSpeed=Number(i.value),t.showDebug=o.checked,t.wasdCamera=s.checked,t.sfxVolume=Number(c.value),t.musicVolume=Number(l.value),d(),a(t),n()})}function h(e,t,n){e.hidden=!1,e.innerHTML=`
+    <div class="dialog">
+      <h2>${n.online?`Menu`:`Paused`}</h2>
+      ${n.online?`<p class="hint">The game keeps running for everyone.</p>`:``}
+      <button data-do="resume">Resume (Esc)</button>
+      ${n.pauseAll?`<button data-do="pauseAll">Pause for everyone</button>`:``}
+      <button data-do="options">Options</button>
+      ${n.saveGame?`<button data-do="saveGame">Save game</button>`:``}
+      ${n.saveReplay?`<button data-do="saveReplay">Save replay</button>`:``}
+      <p class="save-status hint" hidden></p>
+      ${n.online?`<button data-do="resign">Resign</button>`:``}
+      <button data-do="quit">${n.online?`Resign and leave`:`Quit to main menu`}</button>
+      <div class="options" hidden></div>
+    </div>`;let r=e.querySelector(`.options`);e.querySelector(`.dialog`).addEventListener(`click`,i=>{let a=i.target.closest(`[data-do]`)?.getAttribute(`data-do`);if(a===`resume`)e.hidden=!0,n.resume();else if(a===`pauseAll`)e.hidden=!0,n.pauseAll();else if(a===`options`)r.hidden=!r.hidden,r.innerHTML||m(r,t,n.optionsChanged);else if(a===`saveGame`||a===`saveReplay`){let t=e.querySelector(`.save-status`);t.hidden=!1,t.textContent=`Saving…`,(a===`saveGame`?n.saveGame:n.saveReplay)().then(e=>t.textContent=e)}else a===`resign`?(e.hidden=!0,n.resign(),n.resume()):a===`quit`&&n.quit()})}function g(n,r,i){let a=r.players[r.me].team,s=r.winner<0?`Draw`:r.winner===a?`Victory!`:`Defeat`,c=Math.floor(r.tick/20/60),l=Math.floor(r.tick/20)%60;n.hidden=!1,n.innerHTML=`
+    <div class="dialog wide">
+      <h2 class="result">${s}</h2>
+      <p>${r.winner<0?`Nobody wins`:`Team ${r.winner+1} wins`} after ${c}:${String(l).padStart(2,`0`)}.</p>
+      <table class="stats">
+        <tr><th></th>${r.players.map((e,t)=>`<th style="color:${r.colors[t]}">${o(r.names[t]??`Player ${t+1}`)}</th>`).join(``)}</tr>
+        ${[[`Score`,e=>e.score],[`Team`,e=>e.team+1],[`Epoch reached`,t=>e.find(e=>e.order===t.epoch)?.name??t.epoch],[`Resources gathered`,e=>t.reduce((t,n)=>t+e.stats.gathered[n],0)],[`Units trained`,e=>e.stats.unitsTrained],[`Units killed`,e=>e.stats.unitsKilled],[`Units lost`,e=>e.stats.unitsLost],[`Buildings built`,e=>e.stats.buildingsBuilt],[`Buildings destroyed`,e=>e.stats.buildingsRazed],[`Buildings lost`,e=>e.stats.buildingsLost],[`Techs researched`,e=>e.techs.length]].map(([e,t])=>`<tr><td>${e}</td>${r.players.map(e=>`<td>${t(e)}</td>`).join(``)}</tr>`).join(``)}
+      </table>
+      ${i.saveReplay?`<button data-do="saveReplay">Save replay</button><p class="save-status hint" hidden></p>`:``}
+      <button data-do="menu">Main menu</button>
+      <button data-do="watch">Keep watching</button>
+    </div>`,n.querySelector(`.dialog`).addEventListener(`click`,e=>{let t=e.target.closest(`[data-do]`)?.getAttribute(`data-do`);if(t===`menu`&&i.menu(),t===`saveReplay`&&i.saveReplay){let e=n.querySelector(`.save-status`);e.hidden=!1,i.saveReplay().then(t=>e.textContent=t)}t===`watch`&&(n.hidden=!0,i.watch())})}export{u as a,p as i,g as n,f as o,h as r,l as s,m as t};
